@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:books_app/src/common/util/logger.dart';
-import 'package:books_app/src/data/models/books_list_model/books_list_model.dart';
+import 'package:books_app/src/data/models/books_list_model.dart';
 import 'package:http/http.dart' as http;
 
 class BooksRepository {
