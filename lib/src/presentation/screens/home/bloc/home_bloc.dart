@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:books_app/src/common/enum/request_state.dart';
 import 'package:books_app/src/common/util/logger.dart';
-import 'package:books_app/src/data/models/books_list_model/books_list_model.dart';
+import 'package:books_app/src/data/models/books_list_model.dart';
 import 'package:books_app/src/repositories/books_repositories.dart';
 import 'package:equatable/equatable.dart';
 
