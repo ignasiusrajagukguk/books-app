@@ -1,5 +1,5 @@
 import 'package:books_app/src/common/constants/routes.dart';
-import 'package:books_app/src/presentation/dashboard/dashboard.dart';
+import 'package:books_app/src/presentation/screens/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class JobBoxRouter {

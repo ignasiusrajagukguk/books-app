@@ -1,8 +1,8 @@
 import 'package:books_app/src/common/constants/colors.dart';
 import 'package:books_app/src/common/widgets/separator_widget.dart';
 import 'package:books_app/src/common/widgets/typography.dart';
-import 'package:books_app/src/presentation/dashboard/bloc/dashboard_bloc.dart';
-import 'package:books_app/src/presentation/home/home_screen.dart';
+import 'package:books_app/src/presentation/screens/dashboard/bloc/dashboard_bloc.dart';
+import 'package:books_app/src/presentation/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

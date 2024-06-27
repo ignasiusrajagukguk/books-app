@@ -6,8 +6,8 @@ import 'package:books_app/src/common/widgets/text_form_field.dart';
 import 'package:books_app/src/common/widgets/typography.dart';
 import 'package:books_app/src/data/models/books_list_model/books_list_model.dart';
 import 'package:books_app/src/data/models/books_list_model/result.dart';
-import 'package:books_app/src/presentation/home/bloc/home_bloc.dart';
-import 'package:books_app/src/presentation/home/widgets/shimmer.dart';
+import 'package:books_app/src/presentation/screens/home/bloc/home_bloc.dart';
+import 'package:books_app/src/presentation/screens/home/widgets/shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
