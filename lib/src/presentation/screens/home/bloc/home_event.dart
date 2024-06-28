@@ -12,4 +12,3 @@ class GetBooksList extends HomeEvent {
   final String? keywords;
   const GetBooksList({this.page, this.keywords});
 }
-

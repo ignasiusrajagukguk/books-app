@@ -4,6 +4,7 @@ class SeparatorWidget {
   static SizedBox height2() {
     return const SizedBox(height: 2);
   }
+
   static SizedBox height4() {
     return const SizedBox(height: 4);
   }

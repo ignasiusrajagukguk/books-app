@@ -38,6 +38,7 @@ dependencies:
   http: ^0.13.4
   collection: ^1.18.0
   shimmer: ^3.0.0
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_test:
@@ -47,10 +48,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/images/
 
   fonts:
     - family: OpenSansRegular
