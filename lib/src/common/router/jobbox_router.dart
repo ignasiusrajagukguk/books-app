@@ -1,4 +1,5 @@
 import 'package:books_app/src/common/constants/routes.dart';
+import 'package:books_app/src/presentation/screens/book_detail/book_detail_screen.dart';
 import 'package:books_app/src/presentation/screens/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
@@ -19,10 +20,14 @@ class JobBoxRouter {
   }
 
   static Widget _getScreen({required RouteSettings settings}) {
-    // final args = settings.arguments;
+    final args = settings.arguments;
     switch (settings.name) {
       case Routes.homeScreen:
         return const DashboardScreen();
+      case Routes.bookDetailScreen:
+        BookDetailArguments? argument;
+        if (args is BookDetailArguments) argument = args;
+        return BookDetailScreen(arguments: argument!);
       default:
         return Container();
     }

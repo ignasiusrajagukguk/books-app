@@ -8,22 +8,20 @@ const _errorStyleNoLabel = TextStyle(
 );
 
 class TextFormFieldWidget {
-  static Widget search(
-    String hint, {
-    TextEditingController? controller,
-    FormFieldValidator<String>? validator,
-    OutlineInputBorder? focusBorder,
-    AutovalidateMode autovalidateMode = AutovalidateMode.disabled,
-    Color? backgroundColor,
-    VoidCallback? onEditingComplete,
-    Function(String? value)? onChanged,
-    FocusNode? focusNode
-  }) {
+  static Widget search(String hint,
+      {TextEditingController? controller,
+      FormFieldValidator<String>? validator,
+      OutlineInputBorder? focusBorder,
+      AutovalidateMode autovalidateMode = AutovalidateMode.disabled,
+      Color? backgroundColor,
+      VoidCallback? onEditingComplete,
+      Function(String? value)? onChanged,
+      FocusNode? focusNode}) {
     return Stack(
       children: [
         TextFormField(
           autovalidateMode: autovalidateMode,
-          focusNode:focusNode ,
+          focusNode: focusNode,
           textInputAction: TextInputAction.search,
           controller: controller,
           enableSuggestions: true,
@@ -48,7 +46,6 @@ class TextFormFieldWidget {
 }
 
 class _Border {
-
   static OutlineInputBorder _focusedBorder() {
     return const OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(8.0)),

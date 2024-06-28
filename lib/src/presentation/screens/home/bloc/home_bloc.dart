@@ -16,8 +16,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   _getBookList(GetBooksList event, emit) async {
     try {
       emit(state.copyWith(requestState: RequestState.loading));
-      BooksListModel data = await BooksRepository()
-          .getBooksList(page: event.page, keywords: event.keywords);
+      BooksListModel data = await BooksRepository().getBooksList(event);
       emit(state.copyWith(
           booksListModel: data, requestState: RequestState.success));
     } catch (e) {
