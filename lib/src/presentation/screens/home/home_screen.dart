@@ -1,4 +1,6 @@
+import 'package:books_app/src/common/constants/asset_path.dart';
 import 'package:books_app/src/common/constants/colors.dart';
+import 'package:books_app/src/common/constants/empty_widget.dart';
 import 'package:books_app/src/common/enum/request_state.dart';
 import 'package:books_app/src/common/widgets/text_form_field.dart';
 import 'package:books_app/src/common/widgets/typography.dart';
@@ -53,53 +55,107 @@ class __HomeScreenState extends State<_HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: const SizedBox(),
+          toolbarHeight: 130,
+          automaticallyImplyLeading: false,
           leadingWidth: 0,
-          backgroundColor: ConstColors.grayBasic,
-          title: const Center(
-              child: Heading.h3Large(
-            'Books App',
-            color: ConstColors.lightBlue,
-          )),
+          shadowColor: Colors.transparent,
+          backgroundColor: Colors.transparent,
+          surfaceTintColor: Colors.transparent,
+          foregroundColor: Colors.transparent,
           elevation: 0,
+          flexibleSpace: _topWidget(),
+          bottomOpacity: 0,
         ),
-        body: BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
-          return Stack(
-            alignment: Alignment.topCenter,
-            children: [
-              (state.requestState == RequestState.loading)
-                  ? HomeShimmer.listShimmer()
-                  : GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10),
-                      padding: const EdgeInsets.fromLTRB(15, 75, 15, 0),
-                      itemCount: (state.booksListModel.results ?? []).length,
-                      itemBuilder: (context, index) {
-                        BooksListModel booksListModel = state.booksListModel;
-                        List<Result> listResult = booksListModel.results ?? [];
-                        Result resultIndex = listResult[index];
-                        return BookCard(resultIndex: resultIndex);
-                      },
-                    ),
-              Container(
-                padding: const EdgeInsets.all(15),
-                color: ConstColors.grayBasic.withOpacity(.8),
-                child: TextFormFieldWidget.search(
-                  'Search books..',
-                  controller: searchC,
-                  focusNode: focusNode,
-                  backgroundColor: ConstColors.white.withOpacity(.8),
-                  onEditingComplete: () {
-                    _fetchData(1, keywords: searchC.text);
-                    focusNode.unfocus();
-                  },
-                ),
-              ),
-            ],
+        extendBodyBehindAppBar: true,
+        body: _bodyWidget());
+  }
+
+  Widget _bodyWidget() {
+    return BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
+      switch (state.requestState) {
+        case RequestState.loading:
+          return HomeShimmer.listShimmer();
+        case RequestState.success:
+          return GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 10),
+            padding: const EdgeInsets.fromLTRB(15, 200, 15, 0),
+            itemCount: (state.booksListModel.results ?? []).length,
+            itemBuilder: (context, index) {
+              BooksListModel booksListModel = state.booksListModel;
+              List<Result> listResult = booksListModel.results ?? [];
+              Result resultIndex = listResult[index];
+              return BookCard(resultIndex: resultIndex);
+            },
           );
-        }));
+        default:
+          return const EmptyWidget();
+      }
+    });
+  }
+
+  Widget _topWidget() {
+    return FlexibleSpaceBar(
+      titlePadding: const EdgeInsets.all(0),
+      title: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(bottom: 20),
+            height: 160,
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.fromLTRB(15, 60, 15, 0),
+            decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.bottomRight,
+                    end: Alignment.topLeft,
+                    colors: <Color>[ConstColors.lightBlue, ConstColors.green]),
+                borderRadius:
+                    BorderRadius.vertical(bottom: Radius.circular(30))),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Heading.h3Large(
+                          'Books App',
+                          color: ConstColors.white,
+                        ),
+                        BodyText.small(
+                          '"Book is a window to\nthe world"',
+                          color: ConstColors.white,
+                        ),
+                      ],
+                    ),
+                    Image.asset(
+                      ImagePath.home.person,
+                      height: 40,
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: TextFormFieldWidget.search(
+              'Search',
+              controller: searchC,
+              focusNode: focusNode,
+              backgroundColor: ConstColors.white,
+              onEditingComplete: () {
+                _fetchData(1, keywords: searchC.text);
+                focusNode.unfocus();
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

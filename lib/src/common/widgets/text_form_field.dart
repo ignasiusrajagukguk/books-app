@@ -37,7 +37,7 @@ class TextFormFieldWidget {
               filled: true,
               fillColor: backgroundColor ?? Colors.white,
               hintText: hint,
-              prefixIcon: const Icon(Icons.search)),
+              prefixIcon: const Icon(Icons.search, color: ConstColors.lightBlue,)),
           onChanged: onChanged,
         ),
       ],
@@ -48,9 +48,9 @@ class TextFormFieldWidget {
 class _Border {
   static OutlineInputBorder _focusedBorder() {
     return const OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(8.0)),
+      borderRadius: BorderRadius.all(Radius.circular(15)),
       borderSide: BorderSide(
-        color: ConstColors.lightBlue,
+        color: ConstColors.white,
         width: .5,
       ),
     );
@@ -58,9 +58,9 @@ class _Border {
 
   static OutlineInputBorder _enabledBorder() {
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8.0),
+      borderRadius: BorderRadius.circular(15),
       borderSide: const BorderSide(
-        color: ConstColors.gray,
+        color: ConstColors.white,
         width: .5,
       ),
     );
@@ -68,9 +68,9 @@ class _Border {
 
   static OutlineInputBorder _errorBorder() {
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8.0),
+      borderRadius: BorderRadius.circular(15),
       borderSide: const BorderSide(
-        color: Colors.red,
+        color: ConstColors.white,
         width: 1.0,
       ),
     );

@@ -58,7 +58,7 @@ class __BookDetailScreenState extends State<_BookDetailScreen> {
       return Scaffold(
         backgroundColor: ConstColors.grayBasic,
         appBar: AppBar(
-          backgroundColor: ConstColors.grayBasic,
+          backgroundColor: ConstColors.lightBlue,
           centerTitle: true,
           elevation: 0,
           leadingWidth: 60,
@@ -66,7 +66,7 @@ class __BookDetailScreenState extends State<_BookDetailScreen> {
             onPressed: () => Navigator.of(context).pop(),
             icon: const Icon(
               Icons.arrow_back_ios,
-              color: ConstColors.black,
+              color: ConstColors.white,
             ),
           ),
           actions: const [
@@ -77,7 +77,7 @@ class __BookDetailScreenState extends State<_BookDetailScreen> {
           title: const Center(
             child: Heading.h4Bold(
               'Book Detail',
-              color: ConstColors.lightBlue,
+              color: ConstColors.white,
             ),
           ),
         ),

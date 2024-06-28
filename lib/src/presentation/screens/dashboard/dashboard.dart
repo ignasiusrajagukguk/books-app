@@ -1,7 +1,7 @@
 import 'package:books_app/src/common/constants/colors.dart';
 import 'package:books_app/src/common/widgets/separator_widget.dart';
-import 'package:books_app/src/common/widgets/typography.dart';
 import 'package:books_app/src/presentation/screens/dashboard/bloc/dashboard_bloc.dart';
+import 'package:books_app/src/presentation/screens/dashboard/widgets/custom_button.dart';
 import 'package:books_app/src/presentation/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,85 +55,7 @@ class _DashboardScreenState extends State<_DashboardScreen> {
     return BlocBuilder<DashboardBloc, DashboardState>(
         builder: (context, state) {
       return Scaffold(
-          bottomNavigationBar: ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-            child: BottomNavigationBar(
-              backgroundColor: ConstColors.white,
-              showUnselectedLabels: false,
-              selectedItemColor: ConstColors.lightBlue,
-              showSelectedLabels: false,
-              onTap: (index) {
-                pageController.jumpToPage(index);
-                _updateTabIndex(index);
-              },
-              currentIndex: state.tabIndex,
-              items: [
-                BottomNavigationBarItem(
-                  backgroundColor: ConstColors.lightBlue,
-                  icon: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.home_outlined,
-                        size: 20,
-                      ),
-                      SeparatorWidget.width4(),
-                      const BodyText.dfltBold(
-                        'Home',
-                        color: ConstColors.black,
-                      )
-                    ],
-                  ),
-                  activeIcon: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.home,
-                        size: 25,
-                      ),
-                      SeparatorWidget.width4(),
-                      const BodyText.largeBold(
-                        'Home',
-                        color: ConstColors.lightBlue,
-                      )
-                    ],
-                  ),
-                  label: '',
-                ),
-                BottomNavigationBarItem(
-                  icon: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.favorite,
-                        size: 20,
-                      ),
-                      SeparatorWidget.width4(),
-                      const BodyText.dfltBold(
-                        'Liked',
-                        color: ConstColors.black,
-                      )
-                    ],
-                  ),
-                  activeIcon: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.favorite,
-                        size: 25,
-                      ),
-                      SeparatorWidget.width4(),
-                      const BodyText.largeBold(
-                        'Liked',
-                        color: ConstColors.lightBlue,
-                      )
-                    ],
-                  ),
-                  label: '',
-                ),
-              ],
-            ),
-          ),
+          bottomNavigationBar: _bottomNavBar(state),
           backgroundColor: ConstColors.grayBasic,
           body: PageView(
             physics: const NeverScrollableScrollPhysics(),
@@ -141,5 +63,38 @@ class _DashboardScreenState extends State<_DashboardScreen> {
             children: pageList(),
           ));
     });
+  }
+
+  Widget _bottomNavBar(DashboardState state) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+      width: MediaQuery.of(context).size.width,
+      decoration: const BoxDecoration(
+          color: ConstColors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(10))),
+      child: Row(
+        children: [
+          CustomButton(
+            title: 'Home',
+            isActive: state.tabIndex == 0,
+            onTap: () {
+              pageController.jumpToPage(0);
+              _updateTabIndex(0);
+            },
+            state: state,
+          ),
+          SeparatorWidget.width16(),
+          CustomButton(
+            title: 'Liked',
+            isActive: state.tabIndex == 1,
+            onTap: () {
+              pageController.jumpToPage(1);
+              _updateTabIndex(1);
+            },
+            state: state,
+          ),
+        ],
+      ),
+    );
   }
 }
