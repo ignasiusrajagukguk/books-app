@@ -10,7 +10,7 @@ class HomeShimmer {
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 10),
-        padding: const EdgeInsets.fromLTRB(15, 75, 15, 0),
+        padding: const EdgeInsets.fromLTRB(15, 200, 15, 0),
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemCount: 8,
