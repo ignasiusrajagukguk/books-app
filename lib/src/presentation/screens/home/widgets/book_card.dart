@@ -1,22 +1,26 @@
 import 'package:books_app/src/common/constants/colors.dart';
-import 'package:books_app/src/common/constants/routes.dart';
-import 'package:books_app/src/common/util/logger.dart';
 import 'package:books_app/src/common/widgets/separator_widget.dart';
 import 'package:books_app/src/common/widgets/typography.dart';
 import 'package:books_app/src/data/models/result.dart';
-import 'package:books_app/src/presentation/screens/book_detail/book_detail_screen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class BookCard extends StatelessWidget {
-  const BookCard({super.key, required this.resultIndex});
+  const BookCard(
+      {super.key,
+      required this.resultIndex,
+      required this.isLiked,
+      required this.onTapLikeUpdate,
+      required this.onTap});
   final Result resultIndex;
+  final bool isLiked;
+  final Function() onTapLikeUpdate;
+  final Function() onTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.of(context).pushNamed(Routes.bookDetailScreen, arguments: BookDetailArguments(id: resultIndex.id.toString()));
-      },
+      onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -37,17 +41,23 @@ class BookCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width,
-                    child: Image.network(
-                      resultIndex.formats?.imageJpeg ?? '',
+                    child: CachedNetworkImage(
+                      filterQuality: FilterQuality.low,
+                      imageUrl: resultIndex.formats?.imageJpeg ?? '',
                       fit: BoxFit.cover,
-                      opacity: const AlwaysStoppedAnimation(.2),
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Center(
-                            child: Icon(
-                          Icons.image,
-                          size: 60,
-                          color: ConstColors.gray,
-                        ));
+                      imageBuilder: (context, imageProvider) {
+                        return Image(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                            opacity: const AlwaysStoppedAnimation(.2),
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Center(
+                                  child: Icon(
+                                Icons.image,
+                                size: 60,
+                                color: ConstColors.gray,
+                              ));
+                            });
                       },
                     ),
                   ),
@@ -55,21 +65,31 @@ class BookCard extends StatelessWidget {
                 Center(
                     child: Padding(
                   padding: const EdgeInsets.all(5),
-                  child: Image.network(
-                    resultIndex.formats?.imageJpeg ?? '',
-                    errorBuilder: (context, error, stackTrace) {
-                      return const SizedBox();
+                  child: CachedNetworkImage(
+                    filterQuality: FilterQuality.low,
+                    imageUrl: resultIndex.formats?.imageJpeg ?? '',
+                    imageBuilder: (context, imageProvider) {
+                      return Image(
+                          image: imageProvider,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Center(
+                                child: Icon(
+                              Icons.image,
+                              size: 60,
+                              color: ConstColors.gray,
+                            ));
+                          });
                     },
                   ),
                 )),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: GestureDetector(
-                      onTap: () {
-                        Log.info('Book Liked');
-                      },
-                      child: const Icon(
-                        Icons.favorite_border,
+                      onTap: onTapLikeUpdate,
+                      child: Icon(
+                        isLiked == true
+                            ? Icons.favorite
+                            : Icons.favorite_border,
                         size: 25,
                       )),
                 )

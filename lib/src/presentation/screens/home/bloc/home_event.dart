@@ -12,3 +12,12 @@ class GetBooksList extends HomeEvent {
   final String? keywords;
   const GetBooksList({this.page, this.keywords});
 }
+
+class HomeLikedBooks extends HomeEvent {
+  const HomeLikedBooks();
+}
+
+class UpdateLikedBooks extends HomeEvent {
+  final Result book;
+  const UpdateLikedBooks({required this.book});
+}

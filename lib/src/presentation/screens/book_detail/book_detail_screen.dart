@@ -2,19 +2,20 @@ import 'package:books_app/src/common/constants/colors.dart';
 import 'package:books_app/src/common/constants/empty_widget.dart';
 import 'package:books_app/src/common/enum/request_state.dart';
 import 'package:books_app/src/common/widgets/separator_widget.dart';
+import 'package:books_app/src/common/widgets/shimmer.dart';
 import 'package:books_app/src/common/widgets/typography.dart';
 import 'package:books_app/src/data/models/book_detail_model.dart';
+import 'package:books_app/src/data/models/result.dart';
 import 'package:books_app/src/presentation/screens/book_detail/bloc/book_detail_bloc.dart';
 import 'package:books_app/src/presentation/screens/book_detail/widgets/button.dart';
-import 'package:books_app/src/presentation/screens/book_detail/widgets/shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BookDetailArguments {
-  String id;
+  final Result result;
 
-  BookDetailArguments({required this.id});
+  BookDetailArguments({required this.result});
 }
 
 class BookDetailScreen extends StatelessWidget {
@@ -26,15 +27,15 @@ class BookDetailScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => BookDetailBloc(),
       child: _BookDetailScreen(
-        id: arguments.id,
+        result: arguments.result,
       ),
     );
   }
 }
 
 class _BookDetailScreen extends StatefulWidget {
-  const _BookDetailScreen({required this.id});
-  final String id;
+  const _BookDetailScreen({required this.result});
+  final Result result;
 
   @override
   State<_BookDetailScreen> createState() => __BookDetailScreenState();
@@ -44,11 +45,24 @@ class __BookDetailScreenState extends State<_BookDetailScreen> {
   @override
   void initState() {
     super.initState();
-    _fetchData(widget.id);
+    _fetchData();
+    _getlikedBooks();
   }
 
-  _fetchData(String id) {
-    context.read<BookDetailBloc>().add(GetBookDetail(id: id));
+  _fetchData() {
+    context
+        .read<BookDetailBloc>()
+        .add(GetBookDetail(id: widget.result.id.toString()));
+  }
+
+  _getlikedBooks() {
+    context.read<BookDetailBloc>().add(const LikedBookDetail());
+  }
+
+  _updateLikedBooks() {
+    context
+        .read<BookDetailBloc>()
+        .add(UpdateLikedBookDetail(book: widget.result));
   }
 
   @override
@@ -90,7 +104,7 @@ class __BookDetailScreenState extends State<_BookDetailScreen> {
     BookDetailModel bookDetailModel = state.bookDetailModel;
     switch (state.requestState) {
       case RequestState.loading:
-        return BookDetailShimmer.loadingShimmer(context);
+        return ShimmerWidgets.detailShimmer(context);
       case RequestState.success:
         return SingleChildScrollView(
           padding: const EdgeInsets.all(15),
@@ -130,7 +144,22 @@ class __BookDetailScreenState extends State<_BookDetailScreen> {
               ],
             ),
             SeparatorWidget.height16(),
-            Heading.h5Small(bookDetailModel.title ?? ''),
+            Row(
+              children: [
+                Expanded(child: Heading.h5Small(bookDetailModel.title ?? '')),
+                SeparatorWidget.width8(),
+                GestureDetector(
+                    onTap: () {
+                      _updateLikedBooks();
+                    },
+                    child: Icon(
+                      state.likedBooks.contains(widget.result)
+                          ? Icons.favorite
+                          : Icons.favorite_border,
+                      size: 40,
+                    ))
+              ],
+            ),
             SeparatorWidget.height10(),
             const BodyText.dflt('Author :'),
             SeparatorWidget.height8(),

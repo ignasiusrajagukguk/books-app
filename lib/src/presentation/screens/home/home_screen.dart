@@ -1,14 +1,16 @@
 import 'package:books_app/src/common/constants/asset_path.dart';
 import 'package:books_app/src/common/constants/colors.dart';
 import 'package:books_app/src/common/constants/empty_widget.dart';
+import 'package:books_app/src/common/constants/routes.dart';
 import 'package:books_app/src/common/enum/request_state.dart';
 import 'package:books_app/src/common/widgets/text_form_field.dart';
 import 'package:books_app/src/common/widgets/typography.dart';
 import 'package:books_app/src/data/models/books_list_model.dart';
 import 'package:books_app/src/data/models/result.dart';
+import 'package:books_app/src/presentation/screens/book_detail/book_detail_screen.dart';
 import 'package:books_app/src/presentation/screens/home/bloc/home_bloc.dart';
 import 'package:books_app/src/presentation/screens/home/widgets/book_card.dart';
-import 'package:books_app/src/presentation/screens/home/widgets/shimmer.dart';
+import 'package:books_app/src/common/widgets/shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -38,6 +40,7 @@ class __HomeScreenState extends State<_HomeScreen> {
   void initState() {
     super.initState();
     _fetchData(1);
+    _getlikedBooks();
   }
 
   @override
@@ -49,6 +52,14 @@ class __HomeScreenState extends State<_HomeScreen> {
 
   _fetchData(int page, {String? keywords}) {
     context.read<HomeBloc>().add(GetBooksList(page: page, keywords: keywords));
+  }
+
+  _getlikedBooks() {
+    context.read<HomeBloc>().add(const HomeLikedBooks());
+  }
+
+  _updateLikedBooks(Result result) {
+    context.read<HomeBloc>().add(UpdateLikedBooks(book: result));
   }
 
   @override
@@ -74,7 +85,7 @@ class __HomeScreenState extends State<_HomeScreen> {
     return BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
       switch (state.requestState) {
         case RequestState.loading:
-          return HomeShimmer.listShimmer();
+          return ShimmerWidgets.listShimmer();
         case RequestState.success:
           return GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -85,7 +96,23 @@ class __HomeScreenState extends State<_HomeScreen> {
               BooksListModel booksListModel = state.booksListModel;
               List<Result> listResult = booksListModel.results ?? [];
               Result resultIndex = listResult[index];
-              return BookCard(resultIndex: resultIndex);
+              List<Result> likedBooks = state.likedBooks;
+              if (listResult.isEmpty) {
+                return const EmptyWidget();
+              }
+              return BookCard(
+                onTapLikeUpdate: () => _updateLikedBooks(resultIndex),
+                onTap: () {
+                  Navigator.of(context)
+                      .pushNamed(Routes.bookDetailScreen,
+                          arguments: BookDetailArguments(
+                            result: resultIndex,
+                          ))
+                      .then((value) => _getlikedBooks());
+                },
+                resultIndex: resultIndex,
+                isLiked: likedBooks.contains(resultIndex),
+              );
             },
           );
         default:

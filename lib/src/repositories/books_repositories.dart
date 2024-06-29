@@ -6,7 +6,7 @@ import 'package:books_app/src/presentation/screens/home/bloc/home_bloc.dart';
 import 'package:http/http.dart' as http;
 
 class BooksRepository {
-  Future<BooksListModel> getBooksList(GetBooksList event) async {
+  static Future<BooksListModel> getBooksList(GetBooksList event) async {
     Log.colorGreen('Keyword : ${event.keywords}');
     final response = await http.get(Uri.https('gutendex.com', '/books',
         {'page': '${event.page}', 'search': event.keywords}));
@@ -16,7 +16,7 @@ class BooksRepository {
     return BooksListModel.fromJson(json);
   }
 
-  Future<BookDetailModel> getBooksDetail({required String id}) async {
+  static Future<BookDetailModel> getBooksDetail({required String id}) async {
     final response = await http.get(
       Uri.parse('http://gutendex.com/books/$id'),
       headers: {},
