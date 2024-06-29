@@ -3,6 +3,7 @@ import 'package:books_app/src/common/widgets/separator_widget.dart';
 import 'package:books_app/src/presentation/screens/dashboard/bloc/dashboard_bloc.dart';
 import 'package:books_app/src/presentation/screens/dashboard/widgets/custom_button.dart';
 import 'package:books_app/src/presentation/screens/home/home_screen.dart';
+import 'package:books_app/src/presentation/screens/liked/liked_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -47,7 +48,7 @@ class _DashboardScreenState extends State<_DashboardScreen> {
   }
 
   List<Widget> pageList() {
-    return [const HomeScreen(), Container()];
+    return [const HomeScreen(), const LikedScreen()];
   }
 
   @override
