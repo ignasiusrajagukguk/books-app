@@ -3,8 +3,8 @@ import 'package:books_app/src/common/enum/request_state.dart';
 import 'package:books_app/src/common/util/logger.dart';
 import 'package:books_app/src/data/models/books_list_model.dart';
 import 'package:books_app/src/data/models/result.dart';
-import 'package:books_app/src/repositories/books_repositories.dart';
-import 'package:books_app/src/repositories/local_storage.dart';
+import 'package:books_app/src/data/datasources/remote/books_datasource.dart';
+import 'package:books_app/src/data/datasources/local/local_storage.dart';
 import 'package:equatable/equatable.dart';
 
 part 'home_event.dart';
@@ -35,7 +35,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       if (state.booksListModel.next == null) {
         emit(state.copyWith(requestState: RequestState.loading));
       }
-      BooksListModel data = await BooksRepository.getBooksList(event,
+      BooksListModel data = await BooksDataSource.getBooksList(event,
           pageIndex: state.pageIndex.toString());
       _addLocalBooks(AddLocalBooks(localBooks: data.results ?? []), emit);
       emit(state.copyWith(

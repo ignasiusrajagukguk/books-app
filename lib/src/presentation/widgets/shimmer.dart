@@ -1,5 +1,5 @@
 import 'package:books_app/src/common/constants/colors.dart';
-import 'package:books_app/src/common/widgets/separator_widget.dart';
+import 'package:books_app/src/presentation/widgets/separator_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 

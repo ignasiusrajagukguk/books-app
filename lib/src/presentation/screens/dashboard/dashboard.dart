@@ -1,5 +1,5 @@
 import 'package:books_app/src/common/constants/colors.dart';
-import 'package:books_app/src/common/widgets/separator_widget.dart';
+import 'package:books_app/src/presentation/widgets/separator_widget.dart';
 import 'package:books_app/src/presentation/screens/dashboard/bloc/dashboard_bloc.dart';
 import 'package:books_app/src/presentation/screens/dashboard/widgets/custom_button.dart';
 import 'package:books_app/src/presentation/screens/home/home_screen.dart';

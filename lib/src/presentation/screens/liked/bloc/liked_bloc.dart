@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:books_app/src/common/enum/request_state.dart';
 import 'package:books_app/src/common/util/logger.dart';
 import 'package:books_app/src/data/models/result.dart';
-import 'package:books_app/src/repositories/local_storage.dart';
+import 'package:books_app/src/data/datasources/local/local_storage.dart';
 import 'package:equatable/equatable.dart';
 
 part 'liked_event.dart';

@@ -3,14 +3,14 @@ import 'package:books_app/src/common/constants/colors.dart';
 import 'package:books_app/src/common/constants/empty_widget.dart';
 import 'package:books_app/src/common/constants/routes.dart';
 import 'package:books_app/src/common/enum/request_state.dart';
-import 'package:books_app/src/common/widgets/text_form_field.dart';
-import 'package:books_app/src/common/widgets/typography.dart';
+import 'package:books_app/src/presentation/widgets/text_form_field.dart';
+import 'package:books_app/src/presentation/widgets/typography.dart';
 import 'package:books_app/src/data/models/books_list_model.dart';
 import 'package:books_app/src/data/models/result.dart';
 import 'package:books_app/src/presentation/screens/book_detail/book_detail_screen.dart';
 import 'package:books_app/src/presentation/screens/home/bloc/home_bloc.dart';
 import 'package:books_app/src/presentation/screens/home/widgets/book_card.dart';
-import 'package:books_app/src/common/widgets/shimmer.dart';
+import 'package:books_app/src/presentation/widgets/shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
