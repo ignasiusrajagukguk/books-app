@@ -36,11 +36,13 @@ class _HomeScreen extends StatefulWidget {
 class __HomeScreenState extends State<_HomeScreen> {
   final TextEditingController searchC = TextEditingController();
   final FocusNode focusNode = FocusNode();
+  final ScrollController scrollController = ScrollController();
   @override
   void initState() {
     super.initState();
-    _fetchData(1);
+    _fetchData();
     _getlikedBooks();
+    scrollController.addListener(_scrollListener);
   }
 
   @override
@@ -48,10 +50,15 @@ class __HomeScreenState extends State<_HomeScreen> {
     super.dispose();
     searchC.dispose();
     focusNode.dispose();
+    scrollController
+      ..removeListener(_scrollListener)
+      ..dispose();
   }
 
-  _fetchData(int page, {String? keywords}) {
-    context.read<HomeBloc>().add(GetBooksList(page: page, keywords: keywords));
+  _fetchData({
+    String? keywords,
+  }) {
+    context.read<HomeBloc>().add(GetBooksList(keywords: keywords));
   }
 
   _getlikedBooks() {
@@ -60,6 +67,17 @@ class __HomeScreenState extends State<_HomeScreen> {
 
   _updateLikedBooks(Result result) {
     context.read<HomeBloc>().add(UpdateLikedBooks(book: result));
+  }
+
+  _resetPageIndex() {
+    context.read<HomeBloc>().add(const ResetPageIndex());
+  }
+
+  _scrollListener() {
+    if (scrollController.position.pixels ==
+        scrollController.position.maxScrollExtent) {
+      _fetchData();
+    }
   }
 
   @override
@@ -87,34 +105,38 @@ class __HomeScreenState extends State<_HomeScreen> {
         case RequestState.loading:
           return ShimmerWidgets.listShimmer();
         case RequestState.success:
+          BooksListModel booksListModel = state.booksListModel;
+          List<Result> listResult = state.currentBooks;
           return GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 10),
-            padding: const EdgeInsets.fromLTRB(15, 200, 15, 0),
-            itemCount: (state.booksListModel.results ?? []).length,
-            itemBuilder: (context, index) {
-              BooksListModel booksListModel = state.booksListModel;
-              List<Result> listResult = booksListModel.results ?? [];
-              Result resultIndex = listResult[index];
-              List<Result> likedBooks = state.likedBooks;
-              if (listResult.isEmpty) {
-                return const EmptyWidget();
-              }
-              return BookCard(
-                onTapLikeUpdate: () => _updateLikedBooks(resultIndex),
-                onTap: () {
-                  Navigator.of(context)
-                      .pushNamed(Routes.bookDetailScreen,
-                          arguments: BookDetailArguments(
-                            result: resultIndex,
-                          ))
-                      .then((value) => _getlikedBooks());
-                },
-                resultIndex: resultIndex,
-                isLiked: likedBooks.contains(resultIndex),
-              );
-            },
-          );
+              controller: scrollController,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 10),
+              padding: const EdgeInsets.fromLTRB(15, 200, 15, 0),
+              itemCount: booksListModel.next != null
+                  ? listResult.length + 2
+                  : listResult.length,
+              itemBuilder: (context, index) {
+                if (listResult.isEmpty) {
+                  return const EmptyWidget();
+                } else if (index >= state.currentBooks.length) {
+                  return ShimmerWidgets.singleCard();
+                }
+                List<Result> likedBooks = state.likedBooks;
+                Result resultIndex = listResult[index];
+                return BookCard(
+                  onTapLikeUpdate: () => _updateLikedBooks(resultIndex),
+                  onTap: () {
+                    Navigator.of(context)
+                        .pushNamed(Routes.bookDetailScreen,
+                            arguments: BookDetailArguments(
+                              result: resultIndex,
+                            ))
+                        .then((value) => _getlikedBooks());
+                  },
+                  resultIndex: resultIndex,
+                  isLiked: likedBooks.contains(resultIndex),
+                );
+              });
         default:
           return const EmptyWidget();
       }
@@ -175,8 +197,15 @@ class __HomeScreenState extends State<_HomeScreen> {
               controller: searchC,
               focusNode: focusNode,
               backgroundColor: ConstColors.white,
+              onChanged: (value) {
+                if (value == '') {
+                  _resetPageIndex();
+                  _fetchData(keywords: searchC.text);
+                }
+              },
               onEditingComplete: () {
-                _fetchData(1, keywords: searchC.text);
+                _resetPageIndex();
+                _fetchData(keywords: searchC.text);
                 focusNode.unfocus();
               },
             ),

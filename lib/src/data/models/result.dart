@@ -1,3 +1,4 @@
+import 'package:books_app/src/data/models/translator.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
@@ -9,7 +10,7 @@ class Result {
   final int? id;
   final String? title;
   final List<Author>? authors;
-  final List<String>? translators;
+  final List<Translator>? translators;
   final List<String>? subjects;
   final List<String>? bookshelves;
   final List<String>? languages;
@@ -43,7 +44,9 @@ class Result {
         authors: (json['authors'] as List<dynamic>?)
             ?.map((e) => Author.fromJson(e as Map<String, dynamic>))
             .toList(),
-        translators: json['translators'].cast<String>() as List<String>?,
+        translators: (json['translators'] as List<dynamic>?)
+            ?.map((e) => Translator.fromJson(e as Map<String, dynamic>))
+            .toList(),
         subjects: json['subjects'].cast<String>() as List<String>?,
         bookshelves: json['bookshelves'].cast<String>() as List<String>?,
         languages: json['languages'].cast<String>() as List<String>?,
@@ -59,7 +62,7 @@ class Result {
         'id': id,
         'title': title,
         'authors': authors?.map((e) => e.toJson()).toList(),
-        'translators': translators,
+        'translators': translators?.map((e) => e.toJson()).toList(),
         'subjects': subjects,
         'bookshelves': bookshelves,
         'languages': languages,
@@ -73,7 +76,7 @@ class Result {
     int? id,
     String? title,
     List<Author>? authors,
-    List<String>? translators,
+    List<Translator>? translators,
     List<String>? subjects,
     List<String>? bookshelves,
     List<String>? languages,
@@ -102,7 +105,7 @@ class Result {
     if (identical(other, this)) return true;
     if (other is! Result) return false;
     final mapEquals = const DeepCollectionEquality().equals;
-    return mapEquals(other.toJson(), toJson());
+    return mapEquals(other, toJson());
   }
 
   @override

@@ -49,6 +49,41 @@ class ShimmerWidgets {
     );
   }
 
+  static Widget singleCard() {
+    return Shimmer.fromColors(
+      baseColor: Colors.white,
+      highlightColor: ConstColors.gray.withOpacity(.1),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(bottom: 10),
+            height: 120,
+            decoration: BoxDecoration(
+                color: ConstColors.gray,
+                borderRadius: BorderRadius.circular(10)),
+          ),
+          Container(
+            margin: const EdgeInsets.only(bottom: 10),
+            height: 10,
+            width: 50,
+            decoration: BoxDecoration(
+                color: ConstColors.gray,
+                borderRadius: BorderRadius.circular(10)),
+          ),
+          Container(
+            margin: const EdgeInsets.only(bottom: 10),
+            height: 10,
+            width: 100,
+            decoration: BoxDecoration(
+                color: ConstColors.gray,
+                borderRadius: BorderRadius.circular(10)),
+          ),
+        ],
+      ),
+    );
+  }
+
   static Widget detailShimmer(BuildContext context) {
     return Shimmer.fromColors(
         baseColor: Colors.white,

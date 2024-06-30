@@ -45,6 +45,9 @@ class BookCard extends StatelessWidget {
                       filterQuality: FilterQuality.low,
                       imageUrl: resultIndex.formats?.imageJpeg ?? '',
                       fit: BoxFit.cover,
+                      errorWidget: (context, url, error) {
+                        return const SizedBox();
+                      },
                       imageBuilder: (context, imageProvider) {
                         return Image(
                             image: imageProvider,
@@ -68,6 +71,14 @@ class BookCard extends StatelessWidget {
                   child: CachedNetworkImage(
                     filterQuality: FilterQuality.low,
                     imageUrl: resultIndex.formats?.imageJpeg ?? '',
+                    errorWidget: (context, url, error) {
+                      return const Center(
+                          child: Icon(
+                        Icons.image,
+                        size: 60,
+                        color: ConstColors.gray,
+                      ));
+                    },
                     imageBuilder: (context, imageProvider) {
                       return Image(
                           image: imageProvider,
@@ -102,7 +113,9 @@ class BookCard extends StatelessWidget {
             ),
             SeparatorWidget.height2(),
             BodyText.xSmall(
-              "Author : ${(resultIndex.authors ?? [])[0].name} (${(resultIndex.authors ?? [])[0].birthYear} - ${(resultIndex.authors ?? [])[0].deathYear})",
+              (resultIndex.authors ?? []).isEmpty
+                  ? 'Author : Unknown'
+                  : "Author : ${(resultIndex.authors ?? [])[0].name} (${(resultIndex.authors ?? [])[0].birthYear} - ${(resultIndex.authors ?? [])[0].deathYear})",
               overflow: TextOverflow.ellipsis,
             ),
           ],

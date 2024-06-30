@@ -9,9 +9,8 @@ class ButtonWidget {
       height: 48,
       child: ElevatedButton(
           style: ButtonStyle(
-              backgroundColor:
-                  const MaterialStatePropertyAll(ConstColors.white),
-              shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+              backgroundColor: const WidgetStatePropertyAll(ConstColors.white),
+              shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ))),
           onPressed: onPressed,
