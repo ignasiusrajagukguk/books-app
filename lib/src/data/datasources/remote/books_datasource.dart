@@ -5,7 +5,7 @@ import 'package:books_app/src/data/models/result.dart';
 import 'package:books_app/src/presentation/screens/home/bloc/home_bloc.dart';
 import 'package:http/http.dart' as http;
 
-class BooksRepository {
+class BooksDataSource {
   static Future<BooksListModel> getBooksList(GetBooksList event,
       {String? pageIndex}) async {
     Log.colorGreen('Keyword : ${event.keywords}');

@@ -1,5 +1,5 @@
 import 'package:books_app/src/common/constants/colors.dart';
-import 'package:books_app/src/common/widgets/typography.dart';
+import 'package:books_app/src/presentation/widgets/typography.dart';
 import 'package:flutter/material.dart';
 
 class ButtonWidget {

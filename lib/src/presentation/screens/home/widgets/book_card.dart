@@ -1,6 +1,6 @@
 import 'package:books_app/src/common/constants/colors.dart';
-import 'package:books_app/src/common/widgets/separator_widget.dart';
-import 'package:books_app/src/common/widgets/typography.dart';
+import 'package:books_app/src/presentation/widgets/separator_widget.dart';
+import 'package:books_app/src/presentation/widgets/typography.dart';
 import 'package:books_app/src/data/models/result.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';

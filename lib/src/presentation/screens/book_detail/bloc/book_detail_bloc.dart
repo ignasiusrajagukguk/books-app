@@ -2,8 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:books_app/src/common/enum/request_state.dart';
 import 'package:books_app/src/common/util/logger.dart';
 import 'package:books_app/src/data/models/result.dart';
-import 'package:books_app/src/repositories/books_repositories.dart';
-import 'package:books_app/src/repositories/local_storage.dart';
+import 'package:books_app/src/data/datasources/remote/books_datasource.dart';
+import 'package:books_app/src/data/datasources/local/local_storage.dart';
 import 'package:equatable/equatable.dart';
 
 part 'book_detail_event.dart';
@@ -19,7 +19,7 @@ class BookDetailBloc extends Bloc<BookDetailEvent, BookDetailState> {
   _getBookDetail(GetBookDetail event, emit) async {
     try {
       emit(state.copyWith(requestState: RequestState.loading));
-      Result data = await BooksRepository.getBooksDetail(id: event.id ?? '');
+      Result data = await BooksDataSource.getBooksDetail(id: event.id ?? '');
       emit(state.copyWith(
           bookDetailModel: data, requestState: RequestState.success));
     } catch (e) {

@@ -1,8 +1,8 @@
 import 'package:books_app/src/common/constants/colors.dart';
 import 'package:books_app/src/common/enum/request_state.dart';
-import 'package:books_app/src/common/widgets/separator_widget.dart';
-import 'package:books_app/src/common/widgets/shimmer.dart';
-import 'package:books_app/src/common/widgets/typography.dart';
+import 'package:books_app/src/presentation/widgets/separator_widget.dart';
+import 'package:books_app/src/presentation/widgets/shimmer.dart';
+import 'package:books_app/src/presentation/widgets/typography.dart';
 import 'package:books_app/src/data/models/result.dart';
 import 'package:books_app/src/presentation/screens/book_detail/bloc/book_detail_bloc.dart';
 import 'package:books_app/src/presentation/screens/book_detail/widgets/button.dart';
