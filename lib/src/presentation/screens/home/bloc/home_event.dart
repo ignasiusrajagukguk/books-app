@@ -8,9 +8,8 @@ abstract class HomeEvent extends Equatable {
 }
 
 class GetBooksList extends HomeEvent {
-  final int? page;
   final String? keywords;
-  const GetBooksList({this.page, this.keywords});
+  const GetBooksList({this.keywords});
 }
 
 class HomeLikedBooks extends HomeEvent {
@@ -20,4 +19,13 @@ class HomeLikedBooks extends HomeEvent {
 class UpdateLikedBooks extends HomeEvent {
   final Result book;
   const UpdateLikedBooks({required this.book});
+}
+
+class ResetPageIndex extends HomeEvent {
+  const ResetPageIndex();
+}
+
+class AddLocalBooks extends HomeEvent {
+  final List<Result> localBooks;
+  const AddLocalBooks({required this.localBooks});
 }

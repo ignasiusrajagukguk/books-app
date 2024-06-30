@@ -6,12 +6,12 @@ class BookDetailState extends Equatable {
       required this.requestState,
       required this.likedBooks});
 
-  final BookDetailModel bookDetailModel;
+  final Result bookDetailModel;
   final RequestState requestState;
   final List<Result> likedBooks;
 
   BookDetailState copyWith(
-      {BookDetailModel? bookDetailModel,
+      {Result? bookDetailModel,
       RequestState? requestState,
       List<Result>? likedBooks}) {
     return BookDetailState(
@@ -21,7 +21,7 @@ class BookDetailState extends Equatable {
   }
 
   factory BookDetailState.initial() => const BookDetailState(
-      bookDetailModel: BookDetailModel(),
+      bookDetailModel: Result(),
       requestState: RequestState.empty,
       likedBooks: <Result>[]);
 
