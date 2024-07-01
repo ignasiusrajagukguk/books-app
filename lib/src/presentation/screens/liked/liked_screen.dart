@@ -10,6 +10,9 @@ import 'package:books_app/src/presentation/screens/home/widgets/book_card.dart';
 import 'package:books_app/src/presentation/screens/liked/bloc/liked_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+
+final _getIt = GetIt.instance;
 
 class LikedScreen extends StatelessWidget {
   const LikedScreen({super.key});
@@ -17,7 +20,7 @@ class LikedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LikedBloc(),
+      create: (context) => _getIt<LikedBloc>(),
       child: const _LikedScreen(),
     );
   }
