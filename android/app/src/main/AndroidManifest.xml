@@ -7,7 +7,7 @@
         </intent>
     </queries>
     <application
-        android:label="books_app"
+        android:label="Books App"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
