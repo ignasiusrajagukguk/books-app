@@ -1,9 +1,19 @@
 import 'dart:convert';
 import 'package:books_app/src/data/models/result.dart';
+import 'package:injectable/injectable.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-class LocalStorage {
+abstract class LocalStorage {
+  Future<int> addLikedBook(Result result);
+  Future<List<Result>?> getLikedBook();
+  Future<int> deleteLikedBook(Result result);
+  Future<int> addLocalBooks(Result result);
+  Future<List<Result>?> getLocalBooks();
+}
+
+@LazySingleton(as: LocalStorage)
+class LocalStorageImplementationc extends LocalStorage {
   static Database? _db;
   static const int _version = 1;
   static const String _dbName = 'books_repo.db';
@@ -58,7 +68,8 @@ class LocalStorage {
     return db;
   }
 
-  static Future<int> addLikedBook(Result result) async {
+  @override
+  Future<int> addLikedBook(Result result) async {
     final db = await _getDB();
     Map<String, dynamic> bookData = {
       'id': result.id,
@@ -77,7 +88,8 @@ class LocalStorage {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  static Future<List<Result>?> getLikedBook() async {
+  @override
+  Future<List<Result>?> getLikedBook() async {
     final db = await database;
     final List<Map<String, dynamic>> bookList = await db.query(_likedTable);
 
@@ -85,7 +97,7 @@ class LocalStorage {
       return List.generate(
           bookList.length,
           (index) => Result.fromJson({
-                'id': bookList[index]['id'],
+                'id': bookList[index]['id'] as int?,
                 'title': bookList[index]['title'],
                 'authors': jsonDecode(bookList[index]['authors']),
                 'subjects': jsonDecode(bookList[index]['subjects']),
@@ -95,20 +107,22 @@ class LocalStorage {
                 'media_type': bookList[index]['media_type'],
                 'copyright': bookList[index]['copyright'] == 1,
                 'formats': jsonDecode(bookList[index]['formats']),
-                'download_count': bookList[index]['download_count'],
+                'download_count': bookList[index]['download_count'] as int?,
               }));
     } else {
       return null;
     }
   }
 
-  static Future<int> deleteLikedBook(Result result) async {
+  @override
+  Future<int> deleteLikedBook(Result result) async {
     final db = await database;
     return await db
         .delete(_likedTable, where: 'id = ?', whereArgs: [result.id]);
   }
 
-  static Future<int> addLocalBooks(Result result) async {
+  @override
+  Future<int> addLocalBooks(Result result) async {
     final db = await _getDB();
     Map<String, dynamic> bookData = {
       'id': result.id,
@@ -127,7 +141,8 @@ class LocalStorage {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  static Future<List<Result>?> getLocalBooks() async {
+  @override
+  Future<List<Result>?> getLocalBooks() async {
     final db = await database;
     final List<Map<String, dynamic>> bookList = await db.query(_localBooks);
 
@@ -135,17 +150,17 @@ class LocalStorage {
       return List.generate(
           bookList.length,
           (index) => Result.fromJson({
-                'id': bookList[index]['id'],
+                'id': bookList[index]['id'] as int?,
                 'title': bookList[index]['title'],
                 'authors': jsonDecode(bookList[index]['authors']),
                 'subjects': jsonDecode(bookList[index]['subjects']),
                 'bookshelves': jsonDecode(bookList[index]['bookshelves']),
-                'languages': jsonDecode(bookList[index]['languages']),
                 'translators': jsonDecode(bookList[index]['translators']),
-                'media_type': bookList[index]['media_type'],
+                'languages': jsonDecode(bookList[index]['languages']),
                 'copyright': bookList[index]['copyright'] == 1,
+                'media_type': bookList[index]['media_type'],
                 'formats': jsonDecode(bookList[index]['formats']),
-                'download_count': bookList[index]['download_count'],
+                'download_count': bookList[index]['download_count']as int?,
               }));
     } else {
       return null;

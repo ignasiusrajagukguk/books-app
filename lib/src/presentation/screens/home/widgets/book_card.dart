@@ -101,7 +101,10 @@ class BookCard extends StatelessWidget {
                         isLiked == true
                             ? Icons.favorite
                             : Icons.favorite_border,
-                        size: 25,
+                        size: 40,
+                        color: isLiked == true
+                            ? ConstColors.red
+                            : ConstColors.gray,
                       )),
                 )
               ],

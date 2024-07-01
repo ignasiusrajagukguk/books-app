@@ -5,7 +5,6 @@ import 'package:books_app/src/common/constants/routes.dart';
 import 'package:books_app/src/common/enum/request_state.dart';
 import 'package:books_app/src/presentation/widgets/text_form_field.dart';
 import 'package:books_app/src/presentation/widgets/typography.dart';
-import 'package:books_app/src/data/models/books_list_model.dart';
 import 'package:books_app/src/data/models/result.dart';
 import 'package:books_app/src/presentation/screens/book_detail/book_detail_screen.dart';
 import 'package:books_app/src/presentation/screens/home/bloc/home_bloc.dart';
@@ -13,6 +12,9 @@ import 'package:books_app/src/presentation/screens/home/widgets/book_card.dart';
 import 'package:books_app/src/presentation/widgets/shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+
+final _getIt = GetIt.instance;
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -20,7 +22,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => HomeBloc(),
+      create: (context) => _getIt<HomeBloc>(),
       child: const _HomeScreen(),
     );
   }
@@ -76,7 +78,10 @@ class __HomeScreenState extends State<_HomeScreen> {
   _scrollListener() {
     if (scrollController.position.pixels ==
         scrollController.position.maxScrollExtent) {
-      _fetchData();
+      var state = context.read<HomeBloc>().state;
+      if (state.booksListModel.next != null) {
+        _fetchData();
+      }
     }
   }
 
@@ -105,26 +110,27 @@ class __HomeScreenState extends State<_HomeScreen> {
         case RequestState.loading:
           return ShimmerWidgets.listShimmer();
         case RequestState.success:
-          BooksListModel booksListModel = state.booksListModel;
-          List<Result> listResult = state.currentBooks;
           return GridView.builder(
               controller: scrollController,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 10),
               padding: const EdgeInsets.fromLTRB(15, 200, 15, 0),
-              itemCount: booksListModel.next != null
-                  ? listResult.length + 2
-                  : listResult.length,
+              itemCount: state.booksListModel.next != null
+                  ? state.currentBooks.length + 2
+                  : state.currentBooks.length,
               itemBuilder: (context, index) {
-                if (listResult.isEmpty) {
-                  return const EmptyWidget();
-                } else if (index >= state.currentBooks.length) {
+                List<Result> listResult = state.currentBooks;
+                if (index >= state.currentBooks.length) {
                   return ShimmerWidgets.singleCard();
                 }
                 List<Result> likedBooks = state.likedBooks;
                 Result resultIndex = listResult[index];
                 return BookCard(
-                  onTapLikeUpdate: () => _updateLikedBooks(resultIndex),
+                  onTapLikeUpdate: () {
+                    setState(() {
+                      _updateLikedBooks(resultIndex);
+                    });
+                  },
                   onTap: () {
                     Navigator.of(context)
                         .pushNamed(Routes.bookDetailScreen,
@@ -134,7 +140,9 @@ class __HomeScreenState extends State<_HomeScreen> {
                         .then((value) => _getlikedBooks());
                   },
                   resultIndex: resultIndex,
-                  isLiked: likedBooks.contains(resultIndex),
+                  isLiked: likedBooks
+                      .map((item) => item.id)
+                      .contains(resultIndex.id),
                 );
               });
         default:

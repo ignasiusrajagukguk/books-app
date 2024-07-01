@@ -9,8 +9,10 @@ import 'package:books_app/src/presentation/screens/book_detail/widgets/button.da
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+final _getIt = GetIt.instance;
 class BookDetailArguments {
   final Result result;
 
@@ -24,7 +26,7 @@ class BookDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => BookDetailBloc(),
+      create: (context) => _getIt<BookDetailBloc>(),
       child: _BookDetailScreen(
         result: arguments.result,
       ),
@@ -182,11 +184,16 @@ class __BookDetailScreenState extends State<_BookDetailScreen> {
                 onTap: () {
                   _updateLikedBooks();
                 },
-                child: Icon(
-                  state.likedBooks.contains(widget.result)
+                child: Icon(state.likedBooks
+                          .map((item) => item.id)
+                          .contains(widget.result.id)
                       ? Icons.favorite
                       : Icons.favorite_border,
                   size: 40,
+                  color: state.likedBooks
+                          .map((item) => item.id)
+                          .contains(widget.result.id)
+                      ? ConstColors.red:ConstColors.gray,
                 ))
           ],
         ),
